@@ -15,8 +15,7 @@ const RestaurantsMenu = () => {
       );
       const jsonData = await fetchData.json();
 
-      const allCards =
-        jsonData.data.cards[4].groupedCard.cardGroupMap.REGULAR.cards;
+      const allCards =jsonData?.data.cards[4].groupedCard.cardGroupMap.REGULAR.cards;
 
       const category = allCards.filter(
         (res) =>
