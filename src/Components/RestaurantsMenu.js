@@ -40,13 +40,13 @@ const RestaurantsMenu = () => {
 	}, []);
 
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6 p-32">
+		<div className="grid gap-6 p-32">
 			{menuData.map((category, index) => (
 				<div
 					key={index}
 					className="bg-white p-4 rounded-md shadow-md "
 				>
-					<h2 className="text-lg font-semibold mb-2">
+					<h2 className="text-lg font-semibold mb-2 ">
 						{category.card.card.title}
 						<RestaurantsMenuItems category={category} />
 					</h2>
