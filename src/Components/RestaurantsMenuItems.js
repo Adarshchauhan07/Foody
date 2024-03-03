@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { CDN_URL } from "../Utils/constraints";
 import { useDispatch, useSelector } from "react-redux";
 import { addItems, removeItems } from "../Redux/Slices/CartSlice";
+import { BiHappyHeartEyes } from "react-icons/bi";
 
 const RestaurantsMenuItems = ({ category }) => {
 	const dispatcher = useDispatch();
 	const cartItems = useSelector((state) => state.cartItems);
-
 
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
@@ -18,7 +18,7 @@ const RestaurantsMenuItems = ({ category }) => {
 					<img
 						src={CDN_URL + categoryMenu.card.info.imageId}
 						alt={categoryMenu.card.info.name}
-						className="w-72 h-auto p-2 rounded-md transition duration-300 ease-in-out transform hover:scale-105"
+						className="w-72 h-auto p-2 rounded-xl transition duration-300 ease-in-out transform hover:scale-105"
 					/>
 					<div className="flex flex-col justify-between h-full">
 						<div>
@@ -35,7 +35,7 @@ const RestaurantsMenuItems = ({ category }) => {
 									: categoryMenu.card.info.description}
 							</p>
 						</div>
-						<div className="flex justify-between items-center gap-4">
+						<div className="flex justify-between items-center gap-4 px-3">
 							<span className="text-base font-bold text-blue-500">
 								₹
 								{categoryMenu.card.info.price !== undefined
@@ -53,9 +53,10 @@ const RestaurantsMenuItems = ({ category }) => {
 									dispatcher(addItems(categoryMenu));
 									console.log(cartItems);
 								}}
-								className=" text-white  rounded hover:bg-slate-100 focus:outline-none focus:shadow-outline text-3xl	"
+								className="text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:shadow-outline p-2 rounded-xl text-xs font-bold transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-1"
 							>
-								🛒
+								<BiHappyHeartEyes fontSize='1rem' />
+								BUY NOW
 							</button>
 						</div>
 					</div>

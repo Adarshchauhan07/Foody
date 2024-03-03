@@ -5,41 +5,29 @@ import { MdOutlineDeliveryDining } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
 
 const RestaurantsCard = ({ restaurants }) => {
-
-	const [isHovered, setIsHovered] = useState(false);
 	const header = restaurants?.aggregatedDiscountInfoV3?.header;
 	const subheader = restaurants?.aggregatedDiscountInfoV3?.subHeader;
-
-	const handleHover = () => {
-		setIsHovered(true);
-	};
-
-	const handleLeave = () => {
-		setIsHovered(false);
-	};
 
 	return (
 		<div>
 			<div
-				className={`h-96 bg-white rounded-md p-3 shadow-md ${
-					isHovered ? "hover:shadow-lg" : ""
-				} transition duration-300 ease-in-out`}
-				onMouseEnter={handleHover}
-				onMouseLeave={handleLeave}
+				className="h-96 bg-white rounded-md p-3 shadow-md "
 			>
-				<div className="flex items-center justify-center relative">
+				<div className="flex items-center justify-center relative transition duration-300 ease transform hover:scale-105">
 					<img
 						src={CDN_URL + restaurants.cloudinaryImageId}
 						alt={restaurants.name}
-						className="w-72 h-auto rounded-2xl p-2 transition duration-300 ease-in-out transform hover:scale-105"
+						className="w-72 h-auto rounded-2xl p-2"
 					/>
 					{header && subheader && (
-						<span className="absolute bottom-0 left-6/12 p-3 text-black text-center font-extrabold text-xl">
-							<div className="rounded-lg px-4 py-2 bg-slate-300 bg-opacity-75 flex items-center">
-								<h2>{header }</h2>
-								<h2>{ subheader}</h2>
-							</div>
-						</span>
+						<div className="ribbon absolute mt-2 ml-4">
+							<h2 className="text-xs font-black text-zinc-900">
+								{header}
+							</h2>
+							<h2 className="text-xs font-black text-zinc-900">
+								{subheader}
+							</h2>
+						</div>
 					)}
 				</div>
 
