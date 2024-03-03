@@ -20,7 +20,7 @@ const Navbar = () => {
 
 			<div className="flex gap-3 m-4 pr-4 font-bold text-base items-center relative">
 				<NavLink to="/">HOME</NavLink>
-				<NavLink to="/About">ABOUT</NavLink>
+				<NavLink to="https://adarshchauhanportofolio.000webhostapp.com/#projects">ABOUT</NavLink>
 				<NavLink
 					className="text-2xl relative"
 					to="/Cart"

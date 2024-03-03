@@ -13,7 +13,7 @@ const App=()=>{
       <Navbar/>
       <Routes>
         <Route path='/' element={<Home/>}/>
-        <Route path='/About' element={<About/>}/>
+        <Route path='/About'/>
         <Route path='/Cart' element={<Cart/>}/>
         <Route path='/Restaurants/:ID' element={<RestaurantsMenu/>}/>
         <Route path='/*' element={<div>404 NOT FOUND</div>}/>

@@ -3,6 +3,7 @@ import { CDN_URL } from "../Utils/constraints";
 import { useDispatch, useSelector } from "react-redux";
 import { addItems, removeItems } from "../Redux/Slices/CartSlice";
 import { BiHappyHeartEyes } from "react-icons/bi";
+import toast, { Toaster } from 'react-hot-toast';
 
 const RestaurantsMenuItems = ({ category }) => {
 	const dispatcher = useDispatch();
@@ -48,14 +49,16 @@ const RestaurantsMenuItems = ({ category }) => {
 											.price / 100
 									: categoryMenu.card.info.defaultPrice / 100}
 							</span>
+
 							<button
 								onClick={() => {
 									dispatcher(addItems(categoryMenu));
 									console.log(cartItems);
+									toast.success("Item Added To Cart");
 								}}
 								className="text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:shadow-outline p-2 rounded-xl text-xs font-bold transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-1"
 							>
-								<BiHappyHeartEyes fontSize='1rem' />
+								<BiHappyHeartEyes fontSize="1rem" />
 								BUY NOW
 							</button>
 						</div>
