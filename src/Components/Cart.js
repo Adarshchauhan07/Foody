@@ -8,7 +8,7 @@ import EmptyCart from "../Assets/EmptyCart.png";
 
 const Cart = () => {
 	const dispatcher = useDispatch();
-	const cartItems = useSelector((state) => state.cartItems);
+	const cartItems = useSelector((state) => state.cart.cartItems);
 
 	return (
 		<div className="container mx-auto p-10">
@@ -17,16 +17,14 @@ const Cart = () => {
 					to="/"
 					className="w-full h-full text-2xl text-blue-500 flex flex-col gap-10 justify-start items-center"
 				>
-          <h2>ADD SOME FOOD 😋</h2>
+					<h2>ADD SOME FOOD 😋</h2>
 					<img
 						className="h-96 w-auto"
 						src={EmptyCart}
 					/>
 				</NavLink>
 			) : (
-				
-        
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols- xl:grid-cols-5">
+				<div className="grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols- xl:grid-cols-5">
 					{cartItems.map((categoryMenu) => (
 						<div
 							key={categoryMenu.card.info.id}
@@ -81,12 +79,8 @@ const Cart = () => {
 								</div>
 							</div>
 						</div>
-            
 					))}
 				</div>
-
-
-
 			)}
 		</div>
 	);

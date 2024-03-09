@@ -36,8 +36,7 @@ const RestaurantsMenu = () => {
 			} else {
 				setError("No grouped cards found");
 			}
-		} 
-		catch (e) {
+		} catch (e) {
 			setError("Error fetching menu data");
 			console.error("ERROR", e);
 		} finally {
@@ -72,10 +71,13 @@ const RestaurantsMenu = () => {
 								}`}
 							>
 								<button
-									className="flex font-black text-xs text-center p-2"
+									className="flex font-bold text-xs text-center p-2 gap-2 italic"
 									onClick={() => categorySortHandler(index)}
 								>
 									{cards.card.card.title}
+									<span className="font-black text-lg not-italic">
+										{cards.card.card?.itemCards.length}
+									</span>
 								</button>
 							</li>
 						))}

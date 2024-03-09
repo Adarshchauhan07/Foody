@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { SiCarto } from "react-icons/si";
 
 const Navbar = () => {
-	const cartDataSize = useSelector((state) => state.cartItems);
+	const cartDataSize = useSelector((state) => state.cart.cartItems);
 
 	return (
 		<div className="flex justify-between bg-slate-200 items-center p-1">
@@ -27,7 +27,7 @@ const Navbar = () => {
 				>
 					<div className="flex">
 						<SiCarto fontSize="4rem" />
-						{cartDataSize.length > 0 && (
+						{cartDataSize.length != 0 && (
 							<span className="text-stone-600 rounded-full inline-block animate-bounce w-5 h-5 text-xl absolute -right-4 top-1">
 								{cartDataSize.length}
 							</span>

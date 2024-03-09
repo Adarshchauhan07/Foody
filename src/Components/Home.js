@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { CDN_URL } from "../Utils/constraints";
-import RestaurantsCard, { withLabelRestaurantsCard } from "./RestaurantsCard";
+import RestaurantsCard from "./RestaurantsCard";
 import { NavLink } from "react-router-dom";
 import ShimmerRestaurantsCard from "./ShimmerRestaurantsCard";
+import { useSelector } from "react-redux";
 
 const Home = () => {
 	const [restaurantsName, setRestaurantsName] = useState([]);
 	const [input, setInput] = useState("");
 	const [loading, setloading] = useState(true);
-
-	const LabeledRestaurantsCard = withLabelRestaurantsCard(RestaurantsCard);
+	const likeRestro = useSelector((state) => state.FavourateRestro.likeRestro);
+	const [filter, setFilter] = useState(false);
 
 	const searchHandler = (e) => {
 		e.preventDefault();
@@ -41,6 +42,20 @@ const Home = () => {
 		fetchData();
 	}, []);
 
+	useEffect(() => {
+		console.log("👉", restaurantsName);
+	}, [restaurantsName]);
+
+	function favRestroHandler() {
+		console.log(likeRestro);
+		setFilter(true);
+	}
+
+	function clearFilterHandler() {
+		setFilter(false);
+		fetchData();
+	}
+
 	return (
 		<div>
 			<div className="flex justify-center items-center border rounded-md p-4 mb-4">
@@ -61,19 +76,44 @@ const Home = () => {
 				</button>
 			</div>
 
+			{/* filetr division St*/}
+			<div className="flex items-center m-20 gap-2 font-medium	">
+				<button
+					onClick={clearFilterHandler}
+					className="text-white bg-gray-700 px-4 py-2 rounded-2xl hover:bg-gray-500 hover:text-white transition duration-300 ease-in-out"
+				>
+					Clear All Filters
+				</button>
+				<button
+					onClick={favRestroHandler}
+					className="text-black bg-gray-200 px-4 py-2 rounded-full hover:bg-gray-400 hover:text-white transition duration-300 ease-in-out"
+				>
+					Favourite Restro
+				</button>
+			</div>
+
+			{/* filetr division end*/}
+
 			{loading && <ShimmerRestaurantsCard />}
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 m-20 gap-5">
 				{!loading &&
-					restaurantsName.map((restaurants, index) => (
-						<NavLink
+					filter &&
+					likeRestro.map((restaurants, index) => (
+						<RestaurantsCard
 							key={index}
-							to={`/Restaurants/${restaurants.info.id}`}
-						>
-							<LabeledRestaurantsCard
-								restaurants={restaurants.info}
-								className=""
-							/>
-						</NavLink>
+							restaurants={restaurants}
+						/>
+					))}
+			</div>
+
+			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 m-20 gap-5">
+				{!loading &&
+					!filter &&
+					restaurantsName.map((restaurants, index) => (
+						<RestaurantsCard
+							key={index}
+							restaurants={restaurants.info}
+						/>
 					))}
 			</div>
 		</div>

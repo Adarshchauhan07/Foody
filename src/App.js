@@ -10,7 +10,7 @@ import RestaurantsMenu from './Components/RestaurantsMenu'
 const App=()=>{
   return(
     <div>
-      <Navbar/>
+      <Navbar/> 
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/About'/>
@@ -21,4 +21,6 @@ const App=()=>{
     </div>
   );
 }
+
+
 export default App

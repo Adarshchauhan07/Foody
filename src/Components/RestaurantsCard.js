@@ -3,41 +3,75 @@ import React, { useState } from "react";
 import { CDN_URL } from "../Utils/constraints";
 import { MdOutlineDeliveryDining } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
+import { nanoid } from "@reduxjs/toolkit";
+import { NavLink } from "react-router-dom";
+import { addItem, removeItem } from "../Redux/Slices/FavourateRestroSlice";
+import { useDispatch, useSelector } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
+import { FcLikePlaceholder, FcLike } from "react-icons/fc";
 
 const RestaurantsCard = ({ restaurants }) => {
 	const header = restaurants?.aggregatedDiscountInfoV3?.header;
 	const subheader = restaurants?.aggregatedDiscountInfoV3?.subHeader;
+	const dispatcher = useDispatch();
+	const likeRestro = useSelector((state) => state.FavourateRestro.likeRestro);
 
+	function likeRestroHandler() {
+		console.log(restaurants);
+		if (likeRestro.some((res) => res.id === restaurants.id)) {
+			dispatcher(removeItem(restaurants));
+			toast.error("Added to Favourite Restro");
+		} else {
+			dispatcher(addItem(restaurants));
+			toast.success("Added to Favourite Restro");
+		}
+	}
 	return (
 		<div>
-			<div
-				className="h-96 bg-white rounded-md p-3 shadow-md "
-			>
-				<div className="flex items-center justify-center relative transition duration-300 ease transform hover:scale-105">
-					<img
-						src={CDN_URL + restaurants.cloudinaryImageId}
-						alt={restaurants.name}
-						className="w-72 h-auto rounded-2xl p-2"
-					/>
-					{header && subheader && (
-						<div className="ribbon absolute mt-2 ml-4">
-							<h2 className="text-xs font-black text-zinc-900">
-								{header}
-							</h2>
-							<h2 className="text-xs font-black text-zinc-900">
-								{subheader}
-							</h2>
-						</div>
-					)}
-				</div>
+			<div className="h-96 bg-white rounded-md p-3 shadow-md ">
+				<NavLink
+					key={nanoid}
+					to={`/Restaurants/${restaurants.id}`}
+				>
+					<div className="flex items-center justify-center relative transition duration-300 ease transform hover:scale-105">
+						<img
+							src={CDN_URL + restaurants.cloudinaryImageId}
+							alt={restaurants.name}
+							className="w-72 h-auto rounded-2xl p-2"
+						/>
+						{header && subheader && (
+							<div className="ribbon absolute mt-2 ml-4">
+								<h2 className="text-xs font-black text-zinc-900">
+									{header}
+								</h2>
+								<h2 className="text-xs font-black text-zinc-900">
+									{subheader}
+								</h2>
+							</div>
+						)}
+					</div>
+				</NavLink>
 
 				<div className="p-4">
-					<h3 className="text-xl font-semibold mb-2">
+					<h3 className="flex text-xl font-semibold mb-2 justify-between">
 						{restaurants.name}
+
+						<span
+							className="font-2xl cursor-pointer"
+							onClick={() => likeRestroHandler(restaurants.id)}
+						>
+							{likeRestro.some(
+								(res) => res.id === restaurants.id
+							) ? (
+								<FcLike />
+							) : (
+								<FcLikePlaceholder />
+							)}
+						</span>
 					</h3>
 					<div className="text-gray-600 mb-2 italic text-xs">
 						{restaurants.cuisines.map((res, index) => {
-							return <span>{res}, </span>;
+							return <span key={index}>{res}, </span>;
 						})}
 					</div>
 					<div className="flex flex-row items-center mb-4">
@@ -85,16 +119,6 @@ const RestaurantsCard = ({ restaurants }) => {
 			</div>
 		</div>
 	);
-};
-
-export const withLabelRestaurantsCard = (RestaurantsCard) => {
-	return (restaurants) => {
-		return (
-			<div>
-				<RestaurantsCard {...restaurants} />
-			</div>
-		);
-	};
 };
 
 export default RestaurantsCard;

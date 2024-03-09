@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { CDN_URL } from "../Utils/constraints";
 import { useDispatch, useSelector } from "react-redux";
-import { addItems, removeItems } from "../Redux/Slices/CartSlice";
+import { addItems } from "../Redux/Slices/CartSlice";
 import { BiHappyHeartEyes } from "react-icons/bi";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 const RestaurantsMenuItems = ({ category }) => {
 	const dispatcher = useDispatch();
-	const cartItems = useSelector((state) => state.cartItems);
-
+	const cartItems = useSelector((state) => state.cart.cartItems);
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
 			{category.card.card.itemCards.map((categoryMenu) => (
@@ -52,14 +51,29 @@ const RestaurantsMenuItems = ({ category }) => {
 
 							<button
 								onClick={() => {
-									dispatcher(addItems(categoryMenu));
-									console.log(cartItems);
-									toast.success("Item Added To Cart");
+									if (
+										!cartItems.some(
+											(res) =>
+												res.card.info.id ===
+												categoryMenu.card.info.id
+										)
+									) {
+										dispatcher(addItems(categoryMenu));
+										console.log(cartItems);
+										toast.success("Item Added To Cart");
+									}
 								}}
 								className="text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:shadow-outline p-2 rounded-xl text-xs font-bold transition duration-300 ease-in-out transform hover:scale-105 flex items-center gap-1"
 							>
 								<BiHappyHeartEyes fontSize="1rem" />
-								BUY NOW
+								{cartItems.some(
+									(res) =>
+										res.card.info.id ===
+										categoryMenu.card.info.id
+								)
+									? "ADDED"
+									: "BUY NOW"
+									}
 							</button>
 						</div>
 					</div>
