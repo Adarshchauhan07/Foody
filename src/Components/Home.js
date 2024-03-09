@@ -24,7 +24,7 @@ const Home = () => {
 		try {
 			setloading(true);
 			const response = await fetch(
-				"https://foodfire.onrender.com/api/restaurants?lat=21.1702401&lng=72.83106070000001&page_type=DESKTOP_WEB_LISTING"
+				"https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.65420&lng=77.23730&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
 			);
 			const json = await response.json();
 			setRestaurantsName(
@@ -77,7 +77,7 @@ const Home = () => {
 			</div>
 
 			{/* filetr division St*/}
-			<div className="flex items-center m-20 gap-2 font-medium	">
+			<div className="flex items-center mt-20 ml-20 gap-2 font-medium	">
 				<button
 					onClick={clearFilterHandler}
 					className="text-white bg-gray-700 px-4 py-2 rounded-2xl hover:bg-gray-500 hover:text-white transition duration-300 ease-in-out"
@@ -95,7 +95,7 @@ const Home = () => {
 			{/* filetr division end*/}
 
 			{loading && <ShimmerRestaurantsCard />}
-			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 m-20 gap-5">
+			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-20 ml-20 gap-5">
 				{!loading &&
 					filter &&
 					likeRestro.map((restaurants, index) => (
@@ -106,7 +106,7 @@ const Home = () => {
 					))}
 			</div>
 
-			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 m-20 gap-5">
+			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ml-20 mr-20 gap-5">
 				{!loading &&
 					!filter &&
 					restaurantsName.map((restaurants, index) => (

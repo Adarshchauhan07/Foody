@@ -28,7 +28,7 @@ const RestaurantsCard = ({ restaurants }) => {
 	}
 	return (
 		<div>
-			<div className="h-96 bg-white rounded-md p-3 shadow-md ">
+			<div className="h-96 bg-white rounded-md shadow-xl ">
 				<NavLink
 					key={nanoid}
 					to={`/Restaurants/${restaurants.id}`}
@@ -39,8 +39,9 @@ const RestaurantsCard = ({ restaurants }) => {
 							alt={restaurants.name}
 							className="w-72 h-auto rounded-2xl p-2"
 						/>
+
 						{header && subheader && (
-							<div className="ribbon absolute mt-2 ml-4">
+							<div className="ribbon absolute">
 								<h2 className="text-xs font-black text-zinc-900">
 									{header}
 								</h2>
@@ -55,7 +56,6 @@ const RestaurantsCard = ({ restaurants }) => {
 				<div className="p-4">
 					<h3 className="flex text-xl font-semibold mb-2 justify-between">
 						{restaurants.name}
-
 						<span
 							className="font-2xl cursor-pointer"
 							onClick={() => likeRestroHandler(restaurants.id)}
