@@ -4,31 +4,44 @@ import RestaurantsCard from "./RestaurantsCard";
 import { NavLink } from "react-router-dom";
 import ShimmerRestaurantsCard from "./ShimmerRestaurantsCard";
 import { useSelector } from "react-redux";
+import SliderRestro from "./SliderRestro";
+import { nanoid } from "@reduxjs/toolkit";
+import {apiDataResponse} from "../Utils/apiData";
 
 const Home = () => {
+
+
 	const [restaurantsName, setRestaurantsName] = useState([]);
 	const [input, setInput] = useState("");
 	const [loading, setloading] = useState(true);
 	const likeRestro = useSelector((state) => state.FavourateRestro.likeRestro);
 	const [filter, setFilter] = useState(false);
+	const [SliderRestroDataContaine, setSliderRestroDataContaine] =
+		useState("");
 
 	const searchHandler = (e) => {
 		e.preventDefault();
 		const temp = restaurantsName.filter((data) =>
 			data.info.name.toLowerCase().includes(input.toLowerCase())
 		);
+		setInput("");
 		setRestaurantsName(temp);
 	};
 
 	const fetchData = async () => {
+
+		// console.log("🙃" + apiDataResponse);
+		// console.log(JSON.stringify(apiDataResponse)); // Stringify the entire object
+
+
 		try {
 			setloading(true);
-			const response = await fetch(
-				"https://foodfire.onrender.com/api/restaurants?lat=21.1702401&lng=72.83106070000001&page_type=DESKTOP_WEB_LISTING"
-			);
-			const json = await response.json();
+
+		
+			setSliderRestroDataContaine(apiDataResponse);
+
 			setRestaurantsName(
-				json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
+				apiDataResponse?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
 					?.restaurants
 			);
 		} catch (error) {
@@ -69,6 +82,7 @@ const Home = () => {
 					/>
 				</form>
 				<button
+					key={nanoid}
 					onClick={searchHandler}
 					className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer"
 				>
@@ -76,15 +90,27 @@ const Home = () => {
 				</button>
 			</div>
 
+			{/* slider Restro start */}
+			{!loading && (
+				<SliderRestro
+					key={nanoid}
+					shareData={SliderRestroDataContaine}
+				/>
+			)}
+
+			{/* slider Restro end */}
+
 			{/* filetr division St*/}
 			<div className="flex items-center mt-20 ml-20 gap-2 font-medium	">
 				<button
+					key={1}
 					onClick={clearFilterHandler}
 					className="text-white bg-gray-700 px-4 py-2 rounded-2xl hover:bg-gray-500 hover:text-white transition duration-300 ease-in-out"
 				>
 					Clear All Filters
 				</button>
 				<button
+					key={2}
 					onClick={favRestroHandler}
 					className="text-black bg-gray-200 px-4 py-2 rounded-full hover:bg-gray-400 hover:text-white transition duration-300 ease-in-out"
 				>
@@ -105,15 +131,16 @@ const Home = () => {
 						/>
 					))}
 			</div>
-
-			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ml-20 mr-20 gap-5">
+			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-20 mb-20 gap-5">
 				{!loading &&
 					!filter &&
 					restaurantsName.map((restaurants, index) => (
-						<RestaurantsCard
-							key={index}
-							restaurants={restaurants.info}
-						/>
+						<div className="">
+							<RestaurantsCard
+								key={index}
+								restaurants={restaurants.info}
+							/>
+						</div>
 					))}
 			</div>
 		</div>

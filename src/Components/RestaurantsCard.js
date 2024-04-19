@@ -17,7 +17,9 @@ const RestaurantsCard = ({ restaurants }) => {
 	const likeRestro = useSelector((state) => state.FavourateRestro.likeRestro);
 
 	function likeRestroHandler() {
-		console.log(restaurants);
+
+		console.log("🙃"+restaurants);
+		
 		if (likeRestro.some((res) => res.id === restaurants.id)) {
 			dispatcher(removeItem(restaurants));
 			toast.error("Added to Favourite Restro");
@@ -28,7 +30,7 @@ const RestaurantsCard = ({ restaurants }) => {
 	}
 	return (
 		<div>
-			<div className="h-96 bg-white rounded-md shadow-xl ">
+			<div className="h-full bg-white rounded-md shadow-xl ">
 				<NavLink
 					key={nanoid}
 					to={`/Restaurants/${restaurants.id}`}
@@ -37,7 +39,7 @@ const RestaurantsCard = ({ restaurants }) => {
 						<img
 							src={CDN_URL + restaurants.cloudinaryImageId}
 							alt={restaurants.name}
-							className="w-72 h-auto rounded-2xl p-2"
+							className="w-full h-56 card relative rounded-3xl p-4"
 						/>
 
 						{header && subheader && (
@@ -122,3 +124,5 @@ const RestaurantsCard = ({ restaurants }) => {
 };
 
 export default RestaurantsCard;
+
+
