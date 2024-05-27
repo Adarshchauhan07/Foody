@@ -72,8 +72,7 @@ const RestaurantsMenuItems = ({ category }) => {
 										categoryMenu.card.info.id
 								)
 									? "ADDED"
-									: "BUY NOW"
-									}
+									: "BUY NOW"}
 							</button>
 						</div>
 					</div>

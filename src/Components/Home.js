@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { CDN_URL } from "../Utils/constraints";
 import RestaurantsCard from "./RestaurantsCard";
-import { NavLink } from "react-router-dom";
 import ShimmerRestaurantsCard from "./ShimmerRestaurantsCard";
 import { useSelector } from "react-redux";
 import SliderRestro from "./SliderRestro";
 import { nanoid } from "@reduxjs/toolkit";
-import {apiDataResponse} from "../Utils/apiData";
+import { apiDataResponse } from "../Utils/apiData";
 
 const Home = () => {
-
-
 	const [restaurantsName, setRestaurantsName] = useState([]);
 	const [input, setInput] = useState("");
-	const [loading, setloading] = useState(true);
+	const [loading, setLoading] = useState(true);
 	const likeRestro = useSelector((state) => state.FavourateRestro.likeRestro);
 	const [filter, setFilter] = useState(false);
+	const [filteredRestro, setFilteredRestro] = useState([]);
+	const [checkFilter, setCheckFilter] = useState(false);
 	const [SliderRestroDataContaine, setSliderRestroDataContaine] =
 		useState("");
+
+	const [buttonState, setButtonState] = useState({
+		isOpen: false,
+		rating: false,
+		deliveryTime: false,
+		veg: false,
+	});
 
 	const searchHandler = (e) => {
 		e.preventDefault();
@@ -29,25 +35,22 @@ const Home = () => {
 	};
 
 	const fetchData = async () => {
-
-		// console.log("🙃" + apiDataResponse);
-		// console.log(JSON.stringify(apiDataResponse)); // Stringify the entire object
-
-
 		try {
-			setloading(true);
-
-		
+			setLoading(true);
 			setSliderRestroDataContaine(apiDataResponse);
 
 			setRestaurantsName(
-				apiDataResponse?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
-					?.restaurants
+				apiDataResponse?.data?.cards[1]?.card?.card?.gridElements
+					?.infoWithStyle?.restaurants
+			);
+			setFilteredRestro(
+				apiDataResponse?.data?.cards[1]?.card?.card?.gridElements
+					?.infoWithStyle?.restaurants
 			);
 		} catch (error) {
 			console.log("Error", error);
 		} finally {
-			setloading(false);
+			setLoading(false);
 		}
 	};
 
@@ -55,19 +58,53 @@ const Home = () => {
 		fetchData();
 	}, []);
 
-	useEffect(() => {
-		console.log("👉", restaurantsName);
-	}, [restaurantsName]);
+	const handleButtonClick = (type) => {
+		setButtonState((prevState) => ({
+			...prevState,
+			[type]: !prevState[type],
+		}));
+		FilterHandler(type);
+	};
 
-	function favRestroHandler() {
+	const favRestroHandler = () => {
 		console.log(likeRestro);
-		setFilter(true);
-	}
+		setFilter((prev) => !prev);
+	};
 
-	function clearFilterHandler() {
+	const clearFilterHandler = () => {
 		setFilter(false);
+		setCheckFilter(false);
+		const temp = restaurantsName;
+		setFilteredRestro(temp);
+		setButtonState({
+			isOpen: false,
+			rating: false,
+			deliveryTime: false,
+			veg: false,
+		});
 		fetchData();
-	}
+	};
+
+	const FilterHandler = (str) => {
+		let temp = [...filteredRestro];
+		if (str === "isOpen") {
+			temp = filteredRestro.filter((obj) => obj.info.isOpen === true);
+		}
+		if (str === "rating") {
+			temp = filteredRestro.filter((obj) => obj.info.avgRating >= 4.3);
+		}
+		if (str === "deliveryTime") {
+			temp = filteredRestro.filter(
+				(obj) => obj.info.sla.deliveryTime <= 30
+			);
+		}
+		if (str === "veg") {
+			temp = filteredRestro.filter((obj) => obj.info.veg === true);
+		}
+		setFilter(false);
+		setFilteredRestro(temp);
+		setCheckFilter(true);
+	};
 
 	return (
 		<div>
@@ -82,7 +119,7 @@ const Home = () => {
 					/>
 				</form>
 				<button
-					key={nanoid}
+					key={nanoid()}
 					onClick={searchHandler}
 					className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer"
 				>
@@ -90,35 +127,90 @@ const Home = () => {
 				</button>
 			</div>
 
-			{/* slider Restro start */}
 			{!loading && (
 				<SliderRestro
-					key={nanoid}
+					key={nanoid()}
 					shareData={SliderRestroDataContaine}
 				/>
 			)}
 
-			{/* slider Restro end */}
-
-			{/* filetr division St*/}
-			<div className="flex items-center mt-20 ml-20 gap-2 font-medium	">
+			<div className="flex items-center mt-20 ml-20 gap-2 font-medium">
 				<button
 					key={1}
 					onClick={clearFilterHandler}
-					className="text-white bg-gray-700 px-4 py-2 rounded-2xl hover:bg-gray-500 hover:text-white transition duration-300 ease-in-out"
+					className="relative text-white bg-gray-500 px-4 py-2 rounded-2xl hover:bg-gray-500 hover:text-white transition duration-300 ease-in-out flex"
 				>
 					Clear All Filters
+					<span className="absolute top-0 right-1">
+						{
+							Object.values(buttonState).filter((value) => value)
+								.length
+						}
+					</span>
 				</button>
+
 				<button
 					key={2}
+					onClick={() => handleButtonClick("rating")}
+					className={`text-black px-4 py-2 rounded-full transition duration-300 ease-in-out ${
+						buttonState.rating
+							? "bg-gray-100 hover:bg-gray-200 hover:text-black border border-slate-600"
+							: "bg-gray-100 hover:bg-gray-200 hover:text-black"
+					}`}
+				>
+					Ratings 4.0+
+					{buttonState.rating && <span className="text-sm"> ❌</span>}
+				</button>
+
+				<button
+					key={3}
+					onClick={() => handleButtonClick("isOpen")}
+					className={`text-black px-4 py-2 rounded-full transition duration-300 ease-in-out ${
+						buttonState.isOpen
+							? "bg-gray-100 hover:bg-gray-200 hover:text-black border border-slate-600"
+							: "bg-gray-100 hover:bg-gray-200 hover:text-black"
+					}`}
+				>
+					Is Open
+					{buttonState.isOpen && <span className="text-sm"> ❌</span>}
+				</button>
+
+				<button
+					key={4}
+					onClick={() => handleButtonClick("deliveryTime")}
+					className={`text-black px-4 py-2 rounded-full transition duration-300 ease-in-out ${
+						buttonState.deliveryTime
+							? "bg-gray-100 hover:bg-gray-200 hover:text-black border border-slate-600"
+							: "bg-gray-100 hover:bg-gray-200 hover:text-black"
+					}`}
+				>
+					Within 30 Min
+					{buttonState.deliveryTime && (
+						<span className="text-sm"> ❌</span>
+					)}
+				</button>
+
+				<button
+					key={5}
+					onClick={() => handleButtonClick("veg")}
+					className={`text-black px-4 py-2 rounded-full transition duration-300 ease-in-out ${
+						buttonState.veg
+							? "bg-gray-100 hover:bg-gray-200 hover:text-black border border-slate-600"
+							: "bg-gray-100 hover:bg-gray-200 hover:text-black"
+					}`}
+				>
+					Pure Veg
+					{buttonState.veg && <span className=" text-sm"> ❌</span>}
+				</button>
+
+				<button
+					key={6}
 					onClick={favRestroHandler}
 					className="text-black bg-gray-200 px-4 py-2 rounded-full hover:bg-gray-400 hover:text-white transition duration-300 ease-in-out"
 				>
 					Favourite Restro
 				</button>
 			</div>
-
-			{/* filetr division end*/}
 
 			{loading && <ShimmerRestaurantsCard />}
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-20 ml-20 gap-5">
@@ -134,8 +226,22 @@ const Home = () => {
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-20 mb-20 gap-5">
 				{!loading &&
 					!filter &&
+					!checkFilter &&
 					restaurantsName.map((restaurants, index) => (
-						<div className="">
+						<div key={index}>
+							<RestaurantsCard
+								key={index}
+								restaurants={restaurants.info}
+							/>
+						</div>
+					))}
+			</div>
+			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-20 mb-20 gap-5">
+				{!loading &&
+					!filter &&
+					checkFilter &&
+					filteredRestro.map((restaurants, index) => (
+						<div key={index}>
 							<RestaurantsCard
 								key={index}
 								restaurants={restaurants.info}

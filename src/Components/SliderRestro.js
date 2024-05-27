@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CDN_URL } from "../Utils/constraints";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
-import { IoLocation } from "react-icons/io5";
-import { IoCaretBackOutline } from "react-icons/io5";
+import { IoLocation, IoCaretBackOutline } from "react-icons/io5";
 import { FaCaretRight } from "react-icons/fa";
 
 const SliderRestro = ({ shareData }) => {
@@ -18,51 +17,47 @@ const SliderRestro = ({ shareData }) => {
 
 			if (tempRestroNames) {
 				setRestroNames(
-					tempRestroNames?.card.card.gridElements.infoWithStyle
+					tempRestroNames.card.card.gridElements.infoWithStyle
 						.restaurants || []
 				);
 			}
-
-			setRestaurants(
-				tempRestroNames?.card.card.gridElements.infoWithStyle
-					.restaurants[count].info
-			);
 		};
 		fetchData();
-	}, []);
+	}, [shareData]);
 
 	useEffect(() => {
-		console.log("👍", shareData);
-		// console.log("🟢", restaurants);
-	}, [restroNames, restaurants]);
-
-	function topRestroHandlerButton(num) {
-		if (num === restroNames.length) {
-			setCount(0);
-		} else if (num < 0) {
-			setCount(restroNames.length - 1);
-		} else {
-			setCount(num);
+		if (restroNames.length > 0) {
+			setRestaurants(restroNames[count].info);
 		}
-		setRestaurants(restroNames[count].info);
-		console.log(count);
-	}
+	}, [count, restroNames]);
+
+	const topRestroHandlerButton = (num) => {
+		setCount((num + restroNames.length) % restroNames.length);
+	};
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setCount((prevCount) => (prevCount + 1) % restroNames.length);
+		}, 3000);
+
+		return () => clearInterval(interval);
+	}, [restroNames.length]);
 
 	return (
 		<div>
-			{restaurants !== undefined && (
+			{restaurants && (
 				<div className="flex justify-center gap-5">
 					<button onClick={() => topRestroHandlerButton(count - 1)}>
 						<IoCaretBackOutline fontSize="3rem" />
 					</button>
 
-					<div className="h-60 bg-white rounded-md shadow-xl flex justify-evenly items-center px-5 py-0">
+					<div className="h-60 bg-transparent rounded-lg shadow-xl flex justify-evenly items-center px-5 py-0">
 						<div className="flex flex-col gap-1 px-6">
 							<h2 className="text-emerald-900 font-black text-4xl mb-4">
-								{shareData.data.cards[1].card.card.header
-									.title !== undefined &&
-									shareData?.data?.cards[1]?.card?.card
-										?.header?.title}
+								{
+									shareData.data.cards[1].card.card.header
+										?.title
+								}
 							</h2>
 
 							<div className="">
@@ -80,18 +75,16 @@ const SliderRestro = ({ shareData }) => {
 										</h3>
 										<div className="text-gray-600 mb-2 italic text-xs">
 											{restaurants.cuisines.map(
-												(res, index) => {
-													return (
-														<span key={index}>
-															{res},{" "}
-														</span>
-													);
-												}
+												(res, index) => (
+													<span key={index}>
+														{res},{" "}
+													</span>
+												)
 											)}
 										</div>
 
 										<div className="flex items-center mb-2 justify-between text-sm">
-											<span className="ml-1 flex text-emerald-500	">
+											<span className="ml-1 flex text-emerald-500">
 												{Array.from({ length: 5 }).map(
 													(_, index) => {
 														const starValue =
@@ -102,7 +95,6 @@ const SliderRestro = ({ shareData }) => {
 																restaurants.avgRatingString
 															)
 														) {
-															// Full star
 															return (
 																<FaStar
 																	key={index}
@@ -114,14 +106,12 @@ const SliderRestro = ({ shareData }) => {
 																restaurants.avgRatingString
 															)
 														) {
-															// Half star
 															return (
 																<FaStarHalfAlt
 																	key={index}
 																/>
 															);
 														} else {
-															// Empty star
 															return (
 																<FaStar
 																	key={index}
@@ -140,11 +130,11 @@ const SliderRestro = ({ shareData }) => {
 							</div>
 						</div>
 
-						<div className="flex items-center justify-center relative transition duration-300 ease transform hover:scale-105">
+						<div className="w-64 h-56 flex items-center rounded-3xl justify-center relative transition duration-300 ease transform hover:scale-105 shadow-lg">
 							<img
 								src={CDN_URL + restaurants.cloudinaryImageId}
 								alt={restaurants.name}
-								className="w-full h-56 card relative rounded-3xl p-4"
+								className="w-full h-full card relative rounded-3xl p-1"
 							/>
 						</div>
 					</div>
