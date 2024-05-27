@@ -87,19 +87,26 @@ const Home = () => {
 
 	const FilterHandler = (str) => {
 		let temp = [...filteredRestro];
-		if (str === "isOpen") {
-			temp = filteredRestro.filter((obj) => obj.info.isOpen === true);
-		}
-		if (str === "rating") {
-			temp = filteredRestro.filter((obj) => obj.info.avgRating >= 4.3);
-		}
-		if (str === "deliveryTime") {
-			temp = filteredRestro.filter(
-				(obj) => obj.info.sla.deliveryTime <= 30
-			);
-		}
-		if (str === "veg") {
-			temp = filteredRestro.filter((obj) => obj.info.veg === true);
+
+		if (buttonState[str] === true) {
+			clearFilterHandler();
+		} else {
+			if (str === "isOpen") {
+				temp = filteredRestro.filter((obj) => obj.info.isOpen === true);
+			}
+			if (str === "rating") {
+				temp = filteredRestro.filter(
+					(obj) => obj.info.avgRating >= 4.3
+				);
+			}
+			if (str === "deliveryTime") {
+				temp = filteredRestro.filter(
+					(obj) => obj.info.sla.deliveryTime <= 30
+				);
+			}
+			if (str === "veg") {
+				temp = filteredRestro.filter((obj) => obj.info.veg === true);
+			}
 		}
 		setFilter(false);
 		setFilteredRestro(temp);
