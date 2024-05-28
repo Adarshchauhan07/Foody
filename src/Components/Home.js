@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import SliderRestro from "./SliderRestro";
 import { nanoid } from "@reduxjs/toolkit";
 import { apiDataResponse } from "../Utils/apiData";
+import "./Home.css";
 
 const Home = () => {
 	const [restaurantsName, setRestaurantsName] = useState([]);
@@ -115,23 +116,22 @@ const Home = () => {
 
 	return (
 		<div>
-			<div className="flex justify-center items-center border rounded-md p-4 mb-4">
-				<form>
-					<input
-						type="text"
-						placeholder="Search the restaurant you want..."
-						value={input}
-						onChange={(e) => setInput(e.target.value)}
-						className="border p-2 mr-2 outline-none w-64"
-					/>
+			<div className="flex justify-end items-center border rounded-xl bg-slate-50 ml-1 mr-1">
+				<span>Search</span>
+				<form onSubmit={searchHandler}>
+					<div class="wrap-input-18">
+						<div class="search">
+							<div>
+								<input
+									type="text"
+									placeholder="Your Favourate restaurants..."
+									value={input}
+									onChange={(e) => setInput(e.target.value)}
+								/>
+							</div>
+						</div>
+					</div>
 				</form>
-				<button
-					key={nanoid()}
-					onClick={searchHandler}
-					className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 cursor-pointer"
-				>
-					SEARCH
-				</button>
 			</div>
 
 			{!loading && (
@@ -147,7 +147,7 @@ const Home = () => {
 					onClick={clearFilterHandler}
 					className="relative text-white bg-gray-500 px-4 py-2 rounded-2xl hover:bg-gray-500 hover:text-white transition duration-300 ease-in-out flex"
 				>
-					Clear All Filters
+					Restore All...
 					<span className="absolute top-0 right-1">
 						{
 							Object.values(buttonState).filter((value) => value)
